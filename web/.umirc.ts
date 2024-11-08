@@ -10,7 +10,8 @@ export default defineConfig({
     npmClient: 'npm',
     proxy: {
         '/api': {
-            'target': 'http://10.13.6.47:8000',
+            // 'target': 'http://10.13.6.47:8000',
+            'target': 'http://localhost:8000',
             'changeOrigin': true,
             // 'pathRewrite': {'^/api': ''},
         },

@@ -1,5 +1,5 @@
 import docker
-
+import time
 client = docker.from_env()
 
 
@@ -83,6 +83,40 @@ def get_container_logs(container_name):
         print(f"获取容器日志时发生错误：{e}")
         return False
 
+# 进入指定容器终端
+def exec_command_in_container(container_name, command):
+    try:
+        the_container = client.containers.get(container_name)
+        # 执行命令并获取输出
+        exec_result = the_container.exec_run(cmd=command, stdout=True, stderr=True, stream=False, tty=True, detach=False,workdir='/usr' )
+        # exec_run 返回一个元组，第一个元素是 exit code，第二个元素是输出内容
+        return_code = exec_result[0]
+        output = exec_result[1].decode('utf-8')  # 将 bytes 解码为 utf-8 字符串
+        return return_code, output
+    except docker.errors.ContainerError as e:
+        # 容器执行命令出错
+        return e.exit_code, str(e)
+    except docker.errors.APIError as e:
+        # Docker API 出错
+        return e.status_code, str(e)
+    except Exception as e:
+        # 其他异常
+        return None, str(e)
+    
+# 进入指定容器终端
+def run_command_and_print_output(container_name, command):
+    exit_code, output = exec_command_in_container(container_name, command)
+    if exit_code == 0:
+        print("Command executed successfully:")
+        print(output)
+    else:
+        print("Error executing command:")
+        print(output)
 
 if __name__ == '__main__':
-    get_container_logs('my_nginx')
+    container_name = 'my_nginx'
+    commands = ['ls -l', 'pwd','whoami','ls -l /usr/share/nginx','cat /usr/share/nginx/html/index.html']
+    for command in commands:
+        run_command_and_print_output(container_name, command)
+    # command = 'ls -l'  # 这里以列出容器当前目录下的文件为例
+    # run_command_and_print_output(container_name, command)

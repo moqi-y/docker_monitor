@@ -5,6 +5,7 @@ from datetime import datetime
 import threading
 from concurrent.futures import ThreadPoolExecutor
 import logging
+from .format import format_time
 
 # 配置日志
 logging.basicConfig(
@@ -41,15 +42,15 @@ def cache_stats(timeout_seconds=5):
         return wrapper
     return decorator
 
-def format_time(time_str: str) -> str:
-    """格式化时间字符串"""
-    if not time_str or time_str == "0001-01-01T00:00:00Z":
-        return "未知"
-    try:
-        dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-        return dt.strftime('%Y-%m-%d %H:%M:%S')
-    except ValueError:
-        return "未知"
+# def format_time(time_str: str) -> str:
+#     """格式化时间字符串"""
+#     if not time_str or time_str == "0001-01-01T00:00:00Z":
+#         return "未知"
+#     try:
+#         dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
+#         return dt.strftime('%Y-%m-%d %H:%M:%S')
+#     except ValueError:
+#         return "未知"
 
 def format_size(size_bytes: float) -> str:
     """格式化字节大小为GB"""
@@ -154,11 +155,20 @@ def get_all_images():
         image_array = []
 
         for image in images:
+            # 使用inspect获取详细信息
+            image_detail = client.api.inspect_image(image.id)
+            
+            # 获取创建时间
+            create_time = image_detail.get('Created', '')
+            
+            # 获取虚拟大小 - 使用Size而不是VirtualSize
+            virtual_size = image_detail.get('Size', 0)
+            
             image_item = {
                 'image_id': image.id,
                 'tags': image.tags[0] if image.tags else '<none>',
-                'create_time': format_time(image.attrs['Created']),
-                'virtual_size': format_size(image.attrs.get('VirtualSize', 0))
+                'create_time': format_time(create_time),
+                'virtual_size': virtual_size/1024/1024 # 转换为MB,  
             }
             image_array.append(image_item)
 

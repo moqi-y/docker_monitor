@@ -35,6 +35,7 @@ const columns: TableProps<object>['columns'] = [
         title: '虚拟大小',
         dataIndex: 'virtual_size',
         key: 'virtual_size',
+        render: (text: string) => <>{Number(text).toFixed(3)}MB</>,
     }
 ];
 
