@@ -2,15 +2,16 @@ import {Space, Table, Tag, message, Button} from 'antd';
 import type {TableProps} from 'antd';
 import {useCallback, useEffect, useState} from 'react';
 import {changeContainerStatus, getContainerList, getContainerLog} from '@/api/container';
-import {CaretRightOutlined, InfoCircleOutlined, StopOutlined} from '@ant-design/icons';
+import {CaretRightOutlined, InfoCircleOutlined, StopOutlined,CodeOutlined} from '@ant-design/icons';
 import Logs from "@/components/logs";
-
+import MyTerminal from "@/components/MyTerminal";
 
 function Container() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [messageApi, contextHolder] = message.useMessage();
     const [isShowLog, setIsShowLog] = useState(false)
+    const [isShowTerminal, setIsShowTerminal] = useState(false)
     const [containerName, setContainerName] = useState('')
     const [logText, setLogText] = useState('')
 
@@ -30,6 +31,14 @@ function Container() {
     const handleCancel = () => {
         setIsShowLog(false);
     };
+
+    const showTerminal = (e:any) => {
+        setContainerName(e.container_name)
+        setIsShowTerminal(true);
+    }
+    const handleTerminalCancel = () => {
+        setIsShowTerminal(false);
+    }
 
     function changeStatus(container_name: string, status:string) {
         setLoading(true);
@@ -52,6 +61,12 @@ function Container() {
             })
     }
 
+    // 打开终端
+    const openTerminal = (e:object) => {
+        console.log("open terminal:", e);
+        showTerminal(e);
+    }
+        
 
     interface Record {
         container_id: string;
@@ -134,6 +149,10 @@ function Container() {
                             onClick={() => showModal(record)}>
                         查看日志
                     </Button>
+                    <Button color="primary" variant="filled" icon={<CodeOutlined />}
+                            onClick={() => openTerminal(record)}>
+                        终端
+                    </Button>
                 </Space>
             ),
         },
@@ -152,6 +171,7 @@ function Container() {
         <div>
             {contextHolder}
             <Logs isShowLog={isShowLog} logText={logText} containerName={containerName} handleCancel={handleCancel}/>
+            <MyTerminal isShowTerminal={isShowTerminal} logText={logText} containerName={containerName} handleTerminalCancel={handleTerminalCancel}/>
             <Table<object> columns={columns} dataSource={data} loading={loading}
                            rowKey={record => record.container_id}/>
         </div>

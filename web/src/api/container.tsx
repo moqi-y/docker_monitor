@@ -31,3 +31,12 @@ export const getContainerLog = (data) => {
         method: "get",
     });
 }
+
+//向指定容器终端输入命令
+export const sendCommand = (data) => {
+    return http({
+        url: "/api/container/terminal",
+        method: "post",
+        data
+    })
+}

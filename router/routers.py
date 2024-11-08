@@ -1,8 +1,9 @@
 import json
 
 from fastapi import APIRouter, status
+from pydantic import BaseModel
 from func.get_all_dockers import get_all_images, get_all_containers
-from utils.docker_options import start_container, stop_container, remove_container, get_container_logs
+from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output
 from utils.sys_options import get_system_info
 
 api_router = APIRouter()
@@ -69,6 +70,7 @@ async def root(container_name: str):
 # 获取指定容器日志
 @api_router.get("/container/logs/{container_name}", summary="获取指定容器日志")
 async def root(container_name: str):
+    print("获取指定容器日志")
     return {
         "code": 200,
         "message": "操作成功",
@@ -106,3 +108,25 @@ async def root():
                 "systemInfo": get_system_info()
             }
     }
+
+class CommandItem(BaseModel):
+    containerName: str
+    command: list | None = None
+
+# 向指定容器发送终端命令
+@api_router.post("/container/terminal", summary="向指定容器发送终端命令")
+async def root(commandItem: CommandItem):
+    print(commandItem.dict())  # 使用 .dict() 方法将 Pydantic 模型转换为字典
+    data = run_command_and_print_output(commandItem.containerName, commandItem.command)
+    if data.get("exit_code") == 0:
+        return {
+            "code": 200,
+            "message": "操作成功",
+            "output": json.dumps(data["output"]),  # 使用字典的键来访问 output
+            "command": json.dumps(commandItem.command),  # 使用 commandItem.command
+        }
+    else:
+        return {
+            "code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": "操作失败",
+        }

@@ -3,12 +3,14 @@ function http(obj: object) {
         // 检查请求方法是否为 GET 或 HEAD，如果是，则不包含 body
         const options = {
             method: obj.method || 'GET',
-            headers: obj.headers || {},
+            headers: obj.headers || {
+                'Content-Type': 'application/json',
+            },
         };
 
         // 如果请求方法不是 GET 或 HEAD，则添加 body
         if (obj.method && !['GET', 'HEAD'].includes(obj.method.toUpperCase())) {
-            options.body = obj.body || obj.data || '';
+            options.body = JSON.stringify(obj.body) || JSON.stringify(obj.data) || '';
         }
 
         fetch(obj.url, options)
