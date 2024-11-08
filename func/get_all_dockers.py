@@ -54,7 +54,7 @@ def format_time(time_str: str) -> str:
 def format_size(size_bytes: float) -> str:
     """格式化字节大小为GB"""
     try:
-        return f"{size_bytes / (1024 ** 3):.3f} GB"
+        return f"{size_bytes / (1024 ** 3):.3f}"
     except (TypeError, ZeroDivisionError):
         return "未知"
 
@@ -80,7 +80,7 @@ def get_container_stats(container: Any) -> Dict[str, Any]:
         return {
             "memory_limit": format_size(memory_limit) if memory_limit else "未知",
             "memory_usage": format_size(memory_usage) if memory_usage else "未知",
-            "memory_rate": f"{(memory_usage / memory_limit * 100):.3f} %" if memory_limit and memory_usage else "未知",
+            "memory_rate": f"{(memory_usage / memory_limit * 100):.3f}" if memory_limit and memory_usage else "未知",
             "network_input": networks.get('rx_bytes', "未知"),
             "network_output": networks.get('tx_bytes', "未知")
         }
