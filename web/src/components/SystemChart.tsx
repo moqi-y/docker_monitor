@@ -3,7 +3,7 @@ import { Column } from '@ant-design/plots';
 const SystemChart = (props: any) => {
   const dockerContainer = props.containerData?.dockerContainer || { containers: [] };  
   const config = {
-    title: "容器内存使用率",
+    title: "容器内存使用率 · %",
     data: dockerContainer?.containers,
     xField: 'container_name',
     yField: 'memory_rate',

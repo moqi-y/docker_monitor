@@ -95,6 +95,7 @@ function Container() {
             title: '内存占用率',
             dataIndex: 'memory_rate',
             key: 'memory_rate',
+            render: (text: string) => <>{text}%</>,
         },
         {
             title: '端口',
