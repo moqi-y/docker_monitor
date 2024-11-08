@@ -32,10 +32,21 @@ const columns: TableProps<object>['columns'] = [
         key: 'create_time',
     },
     {
-        title: '虚拟大小',
+        title: '镜像大小',
         dataIndex: 'virtual_size',
         key: 'virtual_size',
-        render: (text: string) => <>{Number(text).toFixed(3)}MB</>,
+        render: (text: string) => <>{Number(text).toFixed(3)} MB</>,
+    },
+    {
+        title: '系统',
+        dataIndex: 'system',
+        key: 'system',
+        render: (text: string) => <>{text.substring(0, 1).toUpperCase() + text.substring(1)}</>,
+    },
+    {
+        title: '架构',
+        dataIndex: 'architecture',
+        key: 'architecture',
     }
 ];
 
