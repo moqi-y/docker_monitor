@@ -7,12 +7,12 @@ const ContainerRate = (props: any) => {
     {
       key: '1',
       label: '逻辑处理器',
-      children: props.systemData?.systemInfo?.cpu_logical_cores,
+      children: props.systemData?.systemInfo?.system_info?.cpu_logical_cores,
     },
     {
       key: '2',
       label: '物理处理器',
-      children: props.systemData?.systemInfo?.cpu_physical_cores,
+      children: props.systemData?.systemInfo?.system_info?.cpu_physical_cores,
     },
     {
       key: '3',

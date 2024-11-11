@@ -57,8 +57,8 @@ class SystemInfoCollector:
         
         return {
             "memory_info": {
-                "total": round(memory_info.total / (1024 ** 3), 2), # 总物理内存
-                "available": round(memory_info.available / (1024 ** 3), 2), # 可用物理内存
+                "total": round(memory_info.total / (1024 ** 3), 2), # 总物理内存,单位GB
+                "available": round(memory_info.available / (1024 ** 3), 2), # 可用物理内存,单位GB
                 "used": round(memory_info.used / (1024 ** 3), 2), # 已用物理内存
                 "percent": memory_info.percent, # 物理内存使用率
                 "swap": {
@@ -80,9 +80,9 @@ class SystemInfoCollector:
                     "device": partition.device, # 设备名
                     "mountpoint": partition.mountpoint,  # 挂载点
                     "fstype": partition.fstype,  # 文件系统类型
-                    "total": round(usage.total / (1024 ** 3), 2),  # 总大小
-                    "used": round(usage.used / (1024 ** 3), 2),  # 已用大小
-                    "free": round(usage.free / (1024 ** 3), 2), # 可用大小
+                    "total": round(usage.total / (1024 ** 3), 2),  # 总大小,单位GB
+                    "used": round(usage.used / (1024 ** 3), 2),  # 已用大小, 单位GB
+                    "free": round(usage.free / (1024 ** 3), 2), # 可用大小， 单位GB
                     "percent": usage.percent # 使用率
                 })
             except Exception:
@@ -91,7 +91,7 @@ class SystemInfoCollector:
         return {
             "disk_info": {
                 "partitions": partitions, # 磁盘分区信息
-                "io_counters": dict(psutil.disk_io_counters()._asdict()) if psutil.disk_io_counters() else {} # 磁盘IO信息
+                "io_counters": dict(psutil.disk_io_counters()._asdict()) if psutil.disk_io_counters() else {} # 磁盘IO信息，可能为空，单位为字节(byte)
             }
         }
 
@@ -99,8 +99,8 @@ class SystemInfoCollector:
         """获取网络信息"""
         return {
             "network_info": {
-                "io_counters": dict(psutil.net_io_counters()._asdict()),  # 网络IO信息
-                "connections": len(psutil.net_connections()) # 当前网络连接数
+                "io_counters": dict(psutil.net_io_counters()._asdict()),  # 网络IO信息, 单位为字节(byte)
+                "connections": len(psutil.net_connections()) # 当前网络连接数, 单位为连接数
             }
         }
 
