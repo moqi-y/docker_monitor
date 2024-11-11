@@ -1,11 +1,11 @@
-import {defineConfig} from "umi";
+import { defineConfig } from "umi";
 
 export default defineConfig({
     routes: [
-        {path: "/", component: "index"},
-        {path: "/images", component: "images"},
-        {path: "/container", component: "container"},
-        {path: "/host", component: "host"},
+        { path: "/", component: "index" },
+        { path: "/images", component: "images" },
+        { path: "/container", component: "container" },
+        { path: "/host", component: "host" },
     ],
     npmClient: 'npm',
     proxy: {
@@ -16,5 +16,8 @@ export default defineConfig({
             // 'pathRewrite': {'^/api': ''},
         },
     },
-
+    links: [
+        { rel: 'icon', href: './favicon.ico' },
+    ],
+    title: '容器管理系统'
 });

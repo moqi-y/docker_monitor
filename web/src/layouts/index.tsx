@@ -39,6 +39,7 @@ export default function App(props: any) {
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className="logo-vertical">
+                        <img src="./logo.svg" alt="logo" className='logo' />
                         容器管理系统
                     </div>
                     <Menu onSelect={onSelect} theme="dark" mode="inline" items={items} />

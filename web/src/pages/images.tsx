@@ -16,7 +16,7 @@ const columns: TableProps<object>['columns'] = [
         render: (text: string, record: any, index: number) => <>{index + 1}</>,
     },
     {
-        title: '容器ID',
+        title: '镜像ID',
         dataIndex: 'image_id',
         key: 'image_id',
         render: (text: string) => <>{text.substring(0,25)}</>,
