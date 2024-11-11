@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from func.get_all_dockers import get_all_images, get_all_containers
 from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output,reset_global_variable_storage_directory_status
 from utils.sys_options import get_system_info
+from sql_app.crud import *
 
 api_router = APIRouter()
 
@@ -144,3 +145,58 @@ def remove_quotes(text):
     else:
         cleaned_text = text
     return cleaned_text
+
+# #######    用户相关   ########
+@api_router.get("/users/list", tags=["user"], summary="获取用户列表")
+async def get_users_list():
+    rows = query_data('users')
+    users = []
+    for row in rows:
+        print(row)          
+        user = {
+            "uid": row[0],
+            "name": row[1],
+            "post": row[2],
+            "email": row[3],
+            "password": None,
+            "level": row[5],
+            "created_at": row[6],
+            "updated_at": row[7],
+            "deleted": row[8],
+            "remark": row[9]
+        }
+        users.append(user)
+    return {
+            "code": status.HTTP_200_OK,
+            "message": "成功",
+            "users": users
+        }
+
+# 查找用户
+@api_router.get("/users/{user_id}", tags=["user"], summary="查找用户")
+async def find_user(user_id: int):
+    row = query_data('users', f"uid={user_id}")[0]
+    print(row)
+    if row:
+        user = {
+            "uid": row[0],
+            "name": row[1],
+            "post": row[2],
+            "email": row[3],
+            "password": None,
+            "level": row[5],
+            "created_at": row[6],
+            "updated_at": row[7],
+            "deleted": row[8],
+            "remark": row[9]
+        }
+        return {
+            "code": status.HTTP_200_OK,
+            "message": "成功",
+            "data": user
+        }
+    else:
+        return {
+            "code":status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+            "message": "用户不存在"
+        }

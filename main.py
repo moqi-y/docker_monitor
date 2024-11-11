@@ -6,7 +6,6 @@ from fastapi import applications
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.middleware.cors import CORSMiddleware
 from router.routers import api_router
-from sql_app import init_db,create_table
 
 
 def swagger_monkey_patch(*args, **kwargs):
@@ -34,13 +33,15 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix="/api", tags=["api"])
-init_db()
-create_table("users","id INTEGER PRIMARY KEY, name TEXT, post INTEGER, email TEXT, password TEXT, level INTEGER, created_at TEXT, updated_at TEXT, deleted INTEGER,remark TEXT")
+
+# create_table("users","id INTEGER PRIMARY KEY, name TEXT, post INTEGER, email TEXT, password TEXT, level INTEGER, created_at TEXT, updated_at TEXT, deleted INTEGER,remark TEXT")
+
 
 @app.get("/hello/{name}", tags=["test"])
 async def say_hello(name: str):
     print("say_hello", name)
     return {"message": f"Hello {name}"}
+
 
 
 if __name__ == '__main__':
