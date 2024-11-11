@@ -107,20 +107,20 @@ def exec_command_in_container(container_name, command):
 def run_command_and_print_output(container_name, commands):
     for command in commands:
         exit_code, output = exec_command_in_container(container_name, command)
-        if exit_code == 0:
-            print("Command executed successfully:")
-            print(output)
-            return {
-                "exit_code": 0,
-                "output": str(output),
-                "command": str(command)
-            }
-        else:
-            print("Error executing command:")
-            print(output)
-            return {
-                "exit_code": -1
-            }
+        # if exit_code == 0:
+        print("Command executed successfully:")
+        print(output)
+        return {
+            "exit_code": 0,
+            "output": str(output),
+            "command": str(command)
+        }
+        # else:
+            # print("Error executing command:")
+            # print(output)
+            # return {
+            #     "exit_code": -1
+            # }
 
 if __name__ == '__main__':
     container_name = 'my_nginx'
