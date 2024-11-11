@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Col, Row, Statistic } from 'antd';
+import { Card, Col, Row, Statistic, Alert } from 'antd';
 import { PieChartOutlined, DockerOutlined } from '@ant-design/icons';
 import "./index.css"
 import ContainerRate from "@/components/ContainerRate"
@@ -35,7 +35,7 @@ export default function Index() {
     const getImagesData = () => {
         fetch('/api/image/list').then((response) => response.json())
             .then((json) => {
-                setImageData(json.data) 
+                setImageData(json.data)
             })
     }
 
@@ -47,6 +47,11 @@ export default function Index() {
 
     return (
         <div>
+            <Alert
+                message="为保证服务器安全，请勿开启本系统的外网访问！"
+                banner
+                closable
+            />
             <Row gutter={16} style={{ paddingTop: '16px' }}>
                 <Col className="gutter-row" span={12}>
                     <Card bordered={false}>
@@ -78,24 +83,24 @@ export default function Index() {
             <Row gutter={16} style={{ paddingTop: '16px' }}>
                 <Col className="gutter-row" span={8}>
                     <div style={chartStyle}>
-                        <SystemCPURate systemData={systemData}/>
+                        <SystemCPURate systemData={systemData} />
                     </div>
                 </Col>
                 <Col className="gutter-row" span={8}>
                     <div style={chartStyle}>
-                        <SystemMemoryRate systemData={systemData}/>
+                        <SystemMemoryRate systemData={systemData} />
                     </div>
                 </Col>
                 <Col className="gutter-row" span={8}>
                     <div style={chartStyle}>
-                        <ContainerRate systemData={systemData}/>
+                        <ContainerRate systemData={systemData} />
                     </div>
                 </Col>
             </Row>
             <Row gutter={16} style={{ paddingTop: '16px' }}>
                 <Col className="gutter-row" span={24}>
                     <div style={chartStyle}>
-                        <SystemChart containerData={containerData}/>
+                        <SystemChart containerData={containerData} />
                     </div>
                 </Col>
             </Row>
