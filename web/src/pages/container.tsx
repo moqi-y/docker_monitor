@@ -1,8 +1,8 @@
-import {Space, Table, Tag, message, Button} from 'antd';
-import type {TableProps} from 'antd';
-import {useCallback, useEffect, useState} from 'react';
-import {changeContainerStatus, getContainerList, getContainerLog} from '@/api/container';
-import {CaretRightOutlined, InfoCircleOutlined, StopOutlined,CodeOutlined} from '@ant-design/icons';
+import { Space, Table, Tag, message, Button } from 'antd';
+import type { TableProps } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { changeContainerStatus, getContainerList, getContainerLog } from '@/api/container';
+import { CaretRightOutlined, InfoCircleOutlined, StopOutlined, CodeOutlined } from '@ant-design/icons';
 import Logs from "@/components/logs";
 import MyTerminal from "@/components/MyTerminal";
 
@@ -15,14 +15,14 @@ function Container() {
     const [containerName, setContainerName] = useState('')
     const [logText, setLogText] = useState('')
 
-    const getLogs = (containerName:string) => {
-        getContainerLog({containerName: containerName})
+    const getLogs = (containerName: string) => {
+        getContainerLog({ containerName: containerName })
             .then((res: any) => {
                 setLogText(res.data.dockerContainer.logs)
             })
     }
 
-    const showModal = (e:any) => {
+    const showModal = (e: any) => {
         getLogs(e.container_name);
         setContainerName(e.container_name)
         setIsShowLog(true);
@@ -32,7 +32,7 @@ function Container() {
         setIsShowLog(false);
     };
 
-    const showTerminal = (e:any) => {
+    const showTerminal = (e: any) => {
         setContainerName(e.container_name)
         setIsShowTerminal(true);
     }
@@ -40,10 +40,10 @@ function Container() {
         setIsShowTerminal(false);
     }
 
-    function changeStatus(container_name: string, status:string) {
+    function changeStatus(container_name: string, status: string) {
         setLoading(true);
         let statusText = status === 'running' ? 'stop' : 'start';
-        changeContainerStatus({containerName: container_name, status: statusText})
+        changeContainerStatus({ containerName: container_name, status: statusText })
             .then(async (res: any) => {
                 await getList();
                 setLoading(false);
@@ -62,11 +62,11 @@ function Container() {
     }
 
     // 打开终端
-    const openTerminal = (e:object) => {
+    const openTerminal = (e: object) => {
         console.log("open terminal:", e);
         showTerminal(e);
     }
-        
+
 
     interface Record {
         container_id: string;
@@ -104,7 +104,7 @@ function Container() {
         {
             title: '容器启动时间',
             dataIndex: 'start_time',
-            key: 'start_time',
+            key: 'start_time'
         },
         {
             title: '内存占用率',
@@ -129,6 +129,18 @@ function Container() {
                     {status.toUpperCase()}
                 </Tag>
             ),
+            filters: [
+                {
+                  text: 'RUNNING',
+                  value: 'running',
+                },
+                {
+                  text: 'EXITED',
+                  value: 'exited',
+                },
+              ],
+            onFilter: (value, record) => record.status.startsWith(value as string),
+            filterSearch: true,
         },
         {
             title: '操作',
@@ -136,21 +148,21 @@ function Container() {
             render: (_, record: Record) => (
                 <Space size="middle">
                     {record.status === 'running' ?
-                        <Button type="primary" color="danger" icon={<StopOutlined/>} variant="outlined"
-                                onClick={() => changeStatus(record.container_name, record.status)}>
+                        <Button type="primary" color="danger" icon={<StopOutlined />} variant="outlined"
+                            onClick={() => changeStatus(record.container_name, record.status)}>
                             停止
                         </Button> :
-                        <Button type="primary" color="primary" icon={<CaretRightOutlined/>} variant="outlined"
-                                onClick={() => changeStatus(record.container_name, record.status)}>
+                        <Button type="primary" color="primary" icon={<CaretRightOutlined />} variant="outlined"
+                            onClick={() => changeStatus(record.container_name, record.status)}>
                             启动
                         </Button>}
 
-                    <Button type="primary" color="secondary" icon={<InfoCircleOutlined/>} variant="outlined"
-                            onClick={() => showModal(record)}>
+                    <Button type="primary" color="secondary" icon={<InfoCircleOutlined />} variant="outlined"
+                        onClick={() => showModal(record)}>
                         查看日志
                     </Button>
                     <Button disabled={record.status !== 'running'} color="primary" variant="filled" icon={<CodeOutlined />}
-                            onClick={() => openTerminal(record)}>
+                        onClick={() => openTerminal(record)}>
                         终端
                     </Button>
                 </Space>
@@ -170,10 +182,10 @@ function Container() {
     return (
         <div>
             {contextHolder}
-            <Logs isShowLog={isShowLog} logText={logText} containerName={containerName} handleCancel={handleCancel}/>
-            <MyTerminal isShowTerminal={isShowTerminal} logText={logText} containerName={containerName} handleTerminalCancel={handleTerminalCancel}/>
+            <Logs isShowLog={isShowLog} logText={logText} containerName={containerName} handleCancel={handleCancel} />
+            <MyTerminal isShowTerminal={isShowTerminal} logText={logText} containerName={containerName} handleTerminalCancel={handleTerminalCancel} />
             <Table<object> columns={columns} dataSource={data} loading={loading}
-                           rowKey={record => record.container_id}/>
+                rowKey={record => record.container_id} />
         </div>
     );
 }
