@@ -28,18 +28,6 @@ export default function Index() {
         fetch('/api/system/info')
             .then((response) => response.json())
             .then((json) => {
-                //   let tempData:Array<object> = [
-                //     {
-                //       type: '可使用CPU',
-                //       value: 100 - Number(json.data.systemInfo.cpu_usage),
-                //     },
-                //     {
-                //       type: '已使用CPU',
-                //       value: json.data.systemInfo.cpu_usage,
-                //     }
-                //   ]
-                console.log("json.data",json.data);
-                
                 setSystemData(json.data)
             })
     }
