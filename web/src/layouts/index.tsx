@@ -37,7 +37,7 @@ export default function App(props: any) {
     return (
         <ConfigProvider theme={{ cssVar: true }}>
             <Layout style={{ minHeight: '100vh' }}>
-                <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                <Sider collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className="logo-vertical">
                         <img src="./logo.svg" alt="logo" className='logo' />
                         容器管理系统

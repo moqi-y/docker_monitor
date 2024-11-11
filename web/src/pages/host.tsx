@@ -100,7 +100,7 @@ function Host() {
                     <Title level={3} type="success">{hostData?.timestamp}</Title>
                 </Space>
             </Card>
-            <Descriptions title="主机信息" items={items} style={{ marginTop: 40 }} />
+            <Descriptions title="主机信息" items={items} style={{ marginTop: 40 }} bordered column={2}/>
         </div>
     )
 }
