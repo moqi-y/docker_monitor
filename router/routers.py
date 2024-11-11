@@ -122,7 +122,7 @@ async def root(commandItem: CommandItem):
         return {
             "code": 200,
             "message": "操作成功",
-            "output": json.dumps(data["output"]),  # 使用字典的键来访问 output
+            "output": json.dumps(data["output"]).encode().decode('unicode-escape').strip('"'),  # 使用字典的键来访问 output,转换为utf-8  text.encode('utf-8')
             "command": json.dumps(commandItem.command),  # 使用 commandItem.command
         }
     else:

@@ -149,7 +149,7 @@ function Container() {
                             onClick={() => showModal(record)}>
                         查看日志
                     </Button>
-                    <Button color="primary" variant="filled" icon={<CodeOutlined />}
+                    <Button disabled={record.status !== 'running'} color="primary" variant="filled" icon={<CodeOutlined />}
                             onClick={() => openTerminal(record)}>
                         终端
                     </Button>

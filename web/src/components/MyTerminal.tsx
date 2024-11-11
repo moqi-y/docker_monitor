@@ -39,7 +39,7 @@ function MyTerminal(props: any) {
             });
             sendCommand({containerName: props.containerName, command: [tempCmd]}).then((res:any) => {
               console.log(res);
-              print(`${res.output?.replace(/^"|"$/g, '').replace(/\r\n/g, '')}`);
+              print(`${res.output}`);
             })
             
           }}
