@@ -122,7 +122,7 @@ async def root(commandItem: CommandItem):
         return {
             "code": 200,
             "message": "操作成功",
-            "output": json.dumps(data["output"]).encode().decode('unicode-escape').strip('"'),  # 使用字典的键来访问 output,转换为utf-8  text.encode('utf-8')
+            "output": remove_quotes(json.dumps(data["output"]).encode().decode('unicode-escape')),  # 使用字典的键来访问 output,转换为utf-8  text.encode('utf-8')
             "command": json.dumps(commandItem.command),  # 使用 commandItem.command
         }
     else:
@@ -130,3 +130,12 @@ async def root(commandItem: CommandItem):
             "code": status.HTTP_500_INTERNAL_SERVER_ERROR,
             "message": "操作失败",
         }
+    
+# 去除首尾引号方法
+def remove_quotes(text):
+    # 检查字符串首尾是否有双引号，并删除它们
+    if text.startswith('"') and text.endswith('"'):
+        cleaned_text = text[1:-1]
+    else:
+        cleaned_text = text
+    return cleaned_text
