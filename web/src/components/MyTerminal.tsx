@@ -1,14 +1,20 @@
 import Terminal from 'terminal-in-react';
 import { Button, Modal } from "antd";
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import './MyTerminal.css'
 import { sendCommand } from '@/api/container';
+import {resetPath} from '@/api/MyTerminal'
 function MyTerminal(props: any) {
   const showMsg = () => 'Hello World';
 
   const handleCancel = () => {
     props.handleTerminalCancel();
   };
+
+  useEffect(() => {
+    resetPath();
+  }, [props.isShowTerminal])
+
   return (
     <Modal title={`[${props.containerName}]终端`} width={650} height={850} open={props.isShowTerminal} className='model'
       onCancel={() => handleCancel()} cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}>

@@ -1,3 +1,4 @@
+import os
 import docker
 import time
 client = docker.from_env()
@@ -83,12 +84,35 @@ def get_container_logs(container_name):
         print(f"获取容器日志时发生错误：{e}")
         return False
 
+
+
+# 全局变量存储目录状态
+_current_dir = '/'
+
+
 # 进入指定容器终端
 def exec_command_in_container(container_name, command):
+    global _current_dir
+     # 处理 cd 命令
+    if command.startswith('cd '):
+        try:
+            new_dir = command[3:].strip()
+            print("new_dir:", new_dir)
+            if new_dir == '..':
+                # 返回上一级目录
+                _current_dir = os.path.dirname(_current_dir)
+            else:
+                # 进入指定目录
+                _current_dir = new_dir
+                if new_dir[0:1] != '/':
+                    _current_dir = '/' + new_dir
+            return 0, f"当前目录已切换到 {_current_dir}"
+        except Exception as e:
+            return 1, str(e)  # 失败时返回退出码 1
     try:
         the_container = client.containers.get(container_name)
         # 执行命令并获取输出
-        exec_result = the_container.exec_run(cmd=command, stdout=True, stderr=True, stream=False, tty=True, detach=False,workdir='/usr' )
+        exec_result = the_container.exec_run(cmd=command, stdout=True, stderr=True, stream=False, tty=True, detach=False,workdir=_current_dir )
         # exec_run 返回一个元组，第一个元素是 exit code，第二个元素是输出内容
         return_code = exec_result[0]
         output = exec_result[1].decode('utf-8')  # 将 bytes 解码为 utf-8 字符串
@@ -121,6 +145,18 @@ def run_command_and_print_output(container_name, commands):
             # return {
             #     "exit_code": -1
             # }
+
+
+# 重置全局变量存储目录状态
+def reset_global_variable_storage_directory_status():
+    global _current_dir
+    _current_dir = '/'
+    return {
+        "code": 200,
+        "msg": "重置成功"
+    }
+
+
 
 if __name__ == '__main__':
     container_name = 'my_nginx'

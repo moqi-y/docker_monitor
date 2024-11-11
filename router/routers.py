@@ -3,7 +3,7 @@ import json
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from func.get_all_dockers import get_all_images, get_all_containers
-from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output
+from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output,reset_global_variable_storage_directory_status
 from utils.sys_options import get_system_info
 
 api_router = APIRouter()
@@ -130,6 +130,11 @@ async def root(commandItem: CommandItem):
             "code": status.HTTP_500_INTERNAL_SERVER_ERROR,
             "message": "操作失败",
         }
+    
+# 重置全局变量存储目录状态的辅助方法
+@api_router.get("/reset_directory", summary="重置全局变量存储目录状态")
+async def reset_directory():
+    return json.dumps(reset_global_variable_storage_directory_status())
     
 # 去除首尾引号方法
 def remove_quotes(text):
