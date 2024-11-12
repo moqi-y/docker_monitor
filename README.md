@@ -22,4 +22,10 @@ npm start
 ## 访问Web端
 http://localhost:8001
 
+## 服务端
+
+## Web端
+### 技术栈： React 18 + Umi + Antd + Fetch + Zustand 
+
+
 

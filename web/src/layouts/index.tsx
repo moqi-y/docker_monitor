@@ -1,7 +1,8 @@
 import { Link, Outlet } from 'umi';
 import './index.less';
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, Menu, theme,ConfigProvider  } from 'antd';
+import { DownOutlined, LoginOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, Space } from 'antd';
 import { history } from 'umi';
 import {
     AppstoreOutlined,
@@ -27,13 +28,27 @@ const items: MenuItem[] = [
     }
 ];
 
-const onSelect = (key: object) => {
+const onSelect = (key: any) => {
     history.push(key.item.props.path)
 }
 
+const loginOut = () => {
+    localStorage.clear()
+    history.push('/login')
+}
 
 export default function App(props: any) {
     const [collapsed, setCollapsed] = useState(false);
+    const items: MenuProps['items'] = [
+        {
+            key: '1',
+            icon: <LoginOutlined />,
+            label: (
+                <a target="_blank" rel="noopener noreferrer" onClick={loginOut}>
+                    退出登录
+                </a>
+            ),
+        },]
     return (
         <ConfigProvider theme={{ cssVar: true }}>
             <Layout style={{ minHeight: '100vh' }}>
@@ -45,8 +60,18 @@ export default function App(props: any) {
                     <Menu onSelect={onSelect} theme="dark" mode="inline" items={items} />
                 </Sider>
                 <Layout>
-                    <Header style={{ padding: 0, background: '#001529' }}>
-                        logo
+                    <Header style={{ padding: 0, background: '#001529', color: '#fff', display: 'flex', justifyContent: 'flex-end' }}>
+                        <div className='userinfo'>
+                            {/* <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
+                            <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span> */}
+                            <Dropdown menu={{ items }}>
+                                <Space>
+                                    <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
+                                    <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span>
+                                    <DownOutlined />
+                                </Space>
+                            </Dropdown>
+                        </div>
                     </Header>
                     <Content style={{ margin: '0 16px' }}>
                         <Outlet />

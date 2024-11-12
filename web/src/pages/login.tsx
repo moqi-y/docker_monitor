@@ -18,6 +18,7 @@ const Login = () => {
             history.push('/');
             setLoading(false);
             localStorage.setItem('token', res.data.token);
+            localStorage.setItem('userinfo', JSON.stringify(res.data.user));
         }
         else {
             message.error('用户名或密码错误！');
