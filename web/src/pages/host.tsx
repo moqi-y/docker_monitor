@@ -10,7 +10,7 @@ function Host() {
     const getHostData = () => {
         getSystemInfo()
             .then((json:any) => {
-                setHostData(json.data.systemInfo)
+                setHostData(json.data?.systemInfo)
             })
     }
     useEffect(() => {
