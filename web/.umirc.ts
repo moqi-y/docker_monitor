@@ -6,6 +6,7 @@ export default defineConfig({
         { path: "/images", component: "images" },
         { path: "/container", component: "container" },
         { path: "/host", component: "host" },
+        { path: "/login", component: "login" , layout: false},
     ],
     npmClient: 'npm',
     proxy: {
