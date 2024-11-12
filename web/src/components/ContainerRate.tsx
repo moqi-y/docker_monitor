@@ -22,12 +22,12 @@ const ContainerRate = (props: any) => {
     {
       key: '4',
       label: '内存总量',
-      children: props.systemData.systemInfo?.memory_info.total.toFixed(2) + 'GB',
+      children: props.systemData?.systemInfo?.memory_info.total.toFixed(2) + 'GB',
     },
     {
       key: '5',
       label: '内存占用率',
-      children: props.systemData.systemInfo?.memory_info.percent + '%',
+      children: props.systemData?.systemInfo?.memory_info.percent + '%',
     },
   ];
   if (props.systemData?.systemInfo) {
