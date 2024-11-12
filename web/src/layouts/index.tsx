@@ -18,14 +18,15 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
     { key: '1', icon: <PieChartOutlined />, label: '概览', path: '/' },
-    { key: '2', icon: <ContainerOutlined />, label: '主机管理', path: '/host' },
+    { key: '2', icon: <ContainerOutlined />, label: '主机管理', 
+        children:[
+            { key: '2-1', icon: <AppstoreOutlined />, label: '本地主机', path: '/host' },
+            { key: '2-2', icon: <AppstoreOutlined />, label: '远程主机', path: '/remoteContainer' },
+        ]
+     },
     { key: '3', icon: <DesktopOutlined />, label: '镜像管理', path: '/images' },
     {
-        key: '4', icon: <DockerOutlined />, label: '容器管理',
-        children: [
-            { key: '4-1', icon: <AppstoreOutlined />, label: '本机容器列表', path: '/container' },
-            { key: '4-2', icon: <AppstoreOutlined />, label: '集群容器列表', path: '/remoteContainer' },
-        ]
+        key: '4', icon: <DockerOutlined />, label: '容器管理',path: '/container'
     },
     {
         key: '5', icon: <AppstoreOutlined />, label: '运维工具',
