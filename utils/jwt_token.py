@@ -1,6 +1,6 @@
 import jwt
 from datetime import datetime, timedelta
-from fastapi import status,HTTPException
+from fastapi import status,HTTPException,Header
 
 # 定义一个密钥，生产环境中应该保密,这里使用一个简单的字符串示例
 SECRET_KEY = "1234567890"  #在生产环境中，需要从环境变量或配置文件中读取这个密钥,例如：SECRET_KEY = os.getenv("SECRET_KEY")
@@ -18,8 +18,7 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
     return encoded_jwt
 
 # 定义一个函数来验证JWT
-def verify_token(token: str):
-    print("verify_token", token)
+def verify_token(token: str = Header(...)):
     try:
         # 验证JWT
         decoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
