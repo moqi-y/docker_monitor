@@ -1,16 +1,17 @@
 import json
-
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
 from func.get_all_dockers import get_all_images, get_all_containers
 from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output,reset_global_variable_storage_directory_status
 from utils.sys_options import get_system_info
 from sql_app.crud import *
+from utils.jwt_token import create_access_token, verify_token
+from router.model import UserLogin
 
 api_router = APIRouter()
 
 
-@api_router.get("/image/list", summary="获取所有镜像列表")
+@api_router.get("/image/list", summary="获取所有镜像列表",dependencies=[Depends(verify_token)])
 async def root():
     return {
         "code": status.HTTP_200_OK,
@@ -173,7 +174,7 @@ async def get_users_list():
         }
 
 # 查找用户
-@api_router.get("/users/{user_id}", tags=["user"], summary="查找用户")
+@api_router.get("/users/{user_id}", tags=["user"], summary="获取用户信息")
 async def find_user(user_id: int):
     row = query_data('users', f"uid={user_id}")[0]
     print(row)
@@ -199,4 +200,43 @@ async def find_user(user_id: int):
         return {
             "code":status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
             "message": "用户不存在"
+        }
+    
+# 登录
+@api_router.post("/login", tags=["user"], summary="用户登录")
+async def login(user: UserLogin):
+    rows = query_data('users', f"name='{user.name}' and password='{user.password}'")
+    if rows:
+        token = create_access_token(data={"sub": user.name})
+        return {
+            "code": status.HTTP_200_OK,
+            "message": "成功",
+            "data": {
+                "token": token
+            }
+        }
+    else:
+        return {
+            "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+            "message": "用户不存在"
+        }
+
+# 注册
+@api_router.post("/register", tags=["user"], summary="用户注册")
+async def register(user: UserLogin):
+    row = query_data('users', f"name='{user.name}'")[0]
+    print("row", row)
+    if row:
+        return {
+            "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+            "message": "用户已存在"
+        }
+    else:
+        add_data('users', user.dict())
+        return {
+            "code": status.HTTP_200_OK,
+            "message": "成功",
+            "data": {
+                "token": ""
+            }
         }
