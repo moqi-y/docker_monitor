@@ -39,7 +39,7 @@ const loginOut = () => {
 
 export default function App(props: any) {
     const [collapsed, setCollapsed] = useState(false);
-    const items: MenuProps['items'] = [
+    const DropdownList: MenuProps['items'] = [
         {
             key: '1',
             icon: <LoginOutlined />,
@@ -64,7 +64,7 @@ export default function App(props: any) {
                         <div className='userinfo'>
                             {/* <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
                             <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span> */}
-                            <Dropdown menu={{ items }}>
+                            <Dropdown menu={{ items:DropdownList }}>
                                 <Space>
                                     <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
                                     <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span>

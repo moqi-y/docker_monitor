@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Col, Row, Statistic, Alert } from 'antd';
-import { PieChartOutlined, DockerOutlined } from '@ant-design/icons';
+import { PieChartOutlined, DockerOutlined ,DesktopOutlined} from '@ant-design/icons';
 import "./index.css"
 import ContainerRate from "@/components/ContainerRate"
 import SystemCPURate from "@/components/SystemCPURate"
@@ -64,7 +64,7 @@ export default function Index() {
                             value={imageData?.dockerImage?.count}
                             precision={0}
                             valueStyle={{ color: '#3f8600' }}
-                            prefix={<PieChartOutlined />}
+                            prefix={<DesktopOutlined />}
                             suffix="个"
                         />
                     </Card>
