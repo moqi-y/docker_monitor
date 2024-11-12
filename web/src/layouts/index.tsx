@@ -23,7 +23,15 @@ const items: MenuItem[] = [
     {
         key: '4', icon: <DockerOutlined />, label: '容器管理',
         children: [
-            { key: '4-1', icon: <AppstoreOutlined />, label: '容器列表', path: '/container' }
+            { key: '4-1', icon: <AppstoreOutlined />, label: '本机容器列表', path: '/container' },
+            { key: '4-2', icon: <AppstoreOutlined />, label: '集群容器列表', path: '/remoteContainer' },
+        ]
+    },
+    {
+        key: '5', icon: <AppstoreOutlined />, label: '运维工具',
+        children:[
+            { key: '5-1', icon: <AppstoreOutlined />, label: '三方工具', path: '/tools' },
+            { key: '5-2', icon: <AppstoreOutlined />, label: '镜像源', path: '/source' },
         ]
     }
 ];
@@ -62,8 +70,6 @@ export default function App(props: any) {
                 <Layout>
                     <Header style={{ padding: 0, background: '#001529', color: '#fff', display: 'flex', justifyContent: 'flex-end' }}>
                         <div className='userinfo'>
-                            {/* <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
-                            <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span> */}
                             <Dropdown menu={{ items:DropdownList }}>
                                 <Space>
                                     <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />

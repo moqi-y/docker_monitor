@@ -7,6 +7,7 @@ export default defineConfig({
         { path: "/container", component: "container" },
         { path: "/host", component: "host" },
         { path: "/login", component: "login" , layout: false},
+        { path: "/remoteContainer", component: "remoteContainer"},
     ],
     npmClient: 'npm',
     proxy: {
