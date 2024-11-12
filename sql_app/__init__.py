@@ -4,7 +4,7 @@ import sqlite3
 def init_db():
     global conn, cursor
     try:
-        conn = sqlite3.connect('./database/monitor.db')
+        conn = sqlite3.connect('./database/monitor.db', check_same_thread=False)
         cursor = conn.cursor()
         print("初始化数据库连接成功")
         return conn, cursor
