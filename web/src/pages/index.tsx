@@ -24,21 +24,21 @@ export default function Index() {
     const getContainerData = () => {
         getContainerList()
             .then((json:any) => {
-                setContainerData(json.data)
+                setContainerData(json?.data)
             })
     }
     // 获取系统数据
     const getSystemData = () => {
         getSystemInfo()
             .then((json:any) => {
-                setSystemData(json.data)
+                setSystemData(json?.data)
             })
     }
     // 获取镜像信息
     const getImagesData = () => {
         getImagesList()
             .then((json:any) => {
-                setImageData(json.data)
+                setImageData(json?.data)
             })
     }
 

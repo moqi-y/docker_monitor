@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './index.css'
 import { login } from '../api/login'
-
+import { history } from 'umi';
 const { Title, Text } = Typography;
 
 const Login = () => {
@@ -15,6 +15,7 @@ const Login = () => {
         let res: any = await login({ name: values.username, password: values.password })
         if (res.code === 200) {
             message.success('登录成功！');
+            history.push('/');
             setLoading(false);
             localStorage.setItem('token', res.data.token);
         }
