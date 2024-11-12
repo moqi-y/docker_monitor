@@ -206,13 +206,25 @@ async def find_user(user_id: int):
 @api_router.post("/login", tags=["user"], summary="用户登录")
 async def login(user: UserLogin):
     rows = query_data('users', f"name='{user.name}' and password='{user.password}'")
+    print("rows", rows)
     if rows:
         token = create_access_token(data={"sub": user.name})
+        uid = rows[0][0]
         return {
             "code": status.HTTP_200_OK,
             "message": "成功",
             "data": {
-                "token": token
+                "token": token,
+                "user": {
+                    "uid": uid,
+                    "name": user.name,
+                    "post": rows[0][2],
+                    "email": rows[0][3],
+                    "level": rows[0][5],
+                    "created_at": rows[0][6],
+                    "updated_at": rows[0][7],
+                    "deleted": rows[0][8]
+                }
             }
         }
     else:
