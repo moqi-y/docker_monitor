@@ -5,9 +5,9 @@ function http(obj: object) {
             method: obj.method || 'GET',
             headers: obj.headers || {
                 'Content-Type': 'application/json',
+                "token": localStorage.getItem("token") || '',
             },
         };
-
         // 如果请求方法不是 GET 或 HEAD，则添加 body
         if (obj.method && !['GET', 'HEAD'].includes(obj.method.toUpperCase())) {
             options.body = JSON.stringify(obj.body) || JSON.stringify(obj.data) || '';

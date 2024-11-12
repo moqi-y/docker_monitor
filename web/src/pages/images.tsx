@@ -1,11 +1,7 @@
-import {Space, Table, Tag, Spin, Button} from 'antd';
-import type {TableProps} from 'antd';
-import {useEffect, useState} from "react";
-import {useRequest} from 'umi';
-import {getContainerList} from "@/api/container";
-import {CaretRightOutlined, SearchOutlined, StopOutlined} from "@ant-design/icons";
-import {index} from "@umijs/utils/compiled/cheerio/lib/api/traversing";
-import {getImagesList} from "@/api/images";
+import { Table, Tag, } from 'antd';
+import type { TableProps } from 'antd';
+import { useEffect, useState } from "react";
+import { getImagesList } from "@/api/images";
 
 
 const columns: TableProps<object>['columns'] = [
@@ -19,7 +15,7 @@ const columns: TableProps<object>['columns'] = [
         title: '镜像ID',
         dataIndex: 'image_id',
         key: 'image_id',
-        render: (text: string) => <>{text.substring(0,25)}</>,
+        render: (text: string) => <>{text.substring(0, 25)}</>,
     },
     {
         title: 'tags',
@@ -62,7 +58,7 @@ function Container() {
     }, [])
     return (
         <div>
-            <Table<object> columns={columns} dataSource={data} loading={loading} rowKey={record => record.image_id}/>
+            <Table<object> columns={columns} dataSource={data} loading={loading} rowKey={record => record.image_id} />
         </div>
     )
 }

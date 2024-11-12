@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Descriptions, Card, DescriptionsProps, Space, Typography } from 'antd';
+import {getSystemInfo} from "@/api/system"
+
 
 const { Text, Title } = Typography;
 function Host() {
     const [hostData, setHostData] = useState<any>({});
     // 获取系统数据
     const getHostData = () => {
-        fetch('/api/system/info')
-            .then((response) => response.json())
-            .then((json) => {
+        getSystemInfo()
+            .then((json:any) => {
                 setHostData(json.data.systemInfo)
             })
     }

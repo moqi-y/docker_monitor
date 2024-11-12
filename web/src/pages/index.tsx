@@ -7,6 +7,11 @@ import SystemCPURate from "@/components/SystemCPURate"
 import SystemMemoryRate from "@/components/SystemMemoryRate"
 import SystemChart from "@/components/SystemChart"
 import { AnyObject } from 'antd/es/_util/type';
+import {getContainerList} from "@/api/container"
+import {getSystemInfo} from "@/api/system"
+import {getImagesList} from "@/api/images"
+
+
 
 const chartStyle: React.CSSProperties = { background: '#eef1f1', padding: '8px 0', minHeight: '300px' };
 
@@ -17,24 +22,22 @@ export default function Index() {
 
     // 获取容器数据
     const getContainerData = () => {
-        fetch('/api/container/list')
-            .then((response) => response.json())
-            .then((json) => {
+        getContainerList()
+            .then((json:any) => {
                 setContainerData(json.data)
             })
     }
     // 获取系统数据
     const getSystemData = () => {
-        fetch('/api/system/info')
-            .then((response) => response.json())
-            .then((json) => {
+        getSystemInfo()
+            .then((json:any) => {
                 setSystemData(json.data)
             })
     }
     // 获取镜像信息
     const getImagesData = () => {
-        fetch('/api/image/list').then((response) => response.json())
-            .then((json) => {
+        getImagesList()
+            .then((json:any) => {
                 setImageData(json.data)
             })
     }
