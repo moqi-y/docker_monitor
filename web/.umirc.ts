@@ -8,6 +8,8 @@ export default defineConfig({
         { path: "/host", component: "host" },
         { path: "/login", component: "login" , layout: false},
         { path: "/remoteContainer", component: "remoteContainer"},
+        { path: "/tools", component: "tools"},
+        { path: "/source", component: "source"},
     ],
     npmClient: 'npm',
     proxy: {
