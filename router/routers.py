@@ -271,7 +271,14 @@ def is_initial_sys():
     
 
 ####################### 远程服务器相关 #######################
-@api_router.post("/server/list", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
+@api_router.get("/server/list", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
+def server_list():
+    rows = query_data('server')
+    return {
+        "code": status.HTTP_200_OK,
+        "message": "成功",
+        "data": rows
+    }
 
 
 

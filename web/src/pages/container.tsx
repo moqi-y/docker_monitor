@@ -183,7 +183,7 @@ function Container() {
         <div>
             {contextHolder}
             <Logs isShowLog={isShowLog} logText={logText} containerName={containerName} handleCancel={handleCancel} />
-            <MyTerminal isShowTerminal={isShowTerminal} logText={logText} containerName={containerName} handleTerminalCancel={handleTerminalCancel} />
+            <MyTerminal isShowTerminal={isShowTerminal} logText={logText} terminalName={containerName} handleTerminalCancel={handleTerminalCancel} type={1} />
             <Table<object> columns={columns} dataSource={data} loading={loading}
                 rowKey={record => record.container_id} />
         </div>

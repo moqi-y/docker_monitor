@@ -3,8 +3,11 @@ import { Button, Modal } from "antd";
 import {useState,useEffect} from 'react';
 import './MyTerminal.css'
 import { sendCommand } from '@/api/container';
-import {resetPath} from '@/api/MyTerminal'
+import {sendSSH} from '@/api/remoteServer';
+import {resetPath} from '@/api/myTerminal'
 function MyTerminal(props: any) {
+  console.log("props",props.type);
+  
   const showMsg = () => 'Hello World';
 
   const handleCancel = () => {
@@ -16,7 +19,7 @@ function MyTerminal(props: any) {
   }, [props.isShowTerminal])
 
   return (
-    <Modal title={`[${props.containerName}]终端`} width={650} height={850} open={props.isShowTerminal} className='model'
+    <Modal title={`[${props.terminalName}]终端`} width={650} height={850} open={props.isShowTerminal} className='model'
       onCancel={() => handleCancel()} cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}>
       <div
         style={{
@@ -39,14 +42,16 @@ function MyTerminal(props: any) {
           commandPassThrough={(cmd, print) => {            
             let tempCmd = ""
             cmd.forEach(element => {
-              console.log("element",element);
               tempCmd += element + " "
             });
-            sendCommand({containerName: props.containerName, command: [tempCmd]}).then((res:any) => {
+            props.type == 1 && sendCommand({containerName: props.terminalName, command: [tempCmd]}).then((res:any) => {
               console.log(res);
               print(`${res.output}`);
             })
-            
+            props.type == 2 && sendSSH({...props.info,command:tempCmd}).then((res:any) => {
+              console.log(res);
+              print(`${res?.data?.output}`);
+            })
           }}
           msg="You are in the terminal"
         />

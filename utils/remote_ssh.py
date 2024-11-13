@@ -5,10 +5,14 @@ def ssh_command(ip, username, password, command):
     print("启动SSH连接")
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(ip,port=22, username=username, password=password)
+    ssh.connect(ip,port=22, username=username, password=password,timeout=10)
+    print("command:",command)
+    # invoke = ssh.invoke_shell()
+    # invoke.send(command)
+    # time.sleep(1)
+    # res = invoke.recv(9999).decode("utf-8")
     stdin, stdout, stderr = ssh.exec_command(command)
     result = stdout.read().decode(encoding="utf-8")
-    print("result:", result)
     ssh.close()
     return result
 
