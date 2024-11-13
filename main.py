@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_router, prefix="/api", tags=["api"])
+app.include_router(api_router, prefix="/api")
 
 # create_table("users","id INTEGER PRIMARY KEY, name TEXT, post INTEGER, email TEXT, password TEXT, level INTEGER, created_at TEXT, updated_at TEXT, deleted INTEGER,remark TEXT")
 

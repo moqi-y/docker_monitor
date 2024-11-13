@@ -12,7 +12,7 @@ from utils.remote_ssh import ssh_command
 api_router = APIRouter()
 
 
-@api_router.get("/image/list", summary="获取所有镜像列表",dependencies=[Depends(verify_token)])
+@api_router.get("/image/list", summary="获取所有镜像列表",tags=["image"],dependencies=[Depends(verify_token)])
 async def root():
     return {
         "code": status.HTTP_200_OK,
@@ -27,7 +27,7 @@ async def root():
     }
 
 
-@api_router.get("/container/list", summary="获取所有容器列表",dependencies=[Depends(verify_token)])
+@api_router.get("/container/list", summary="获取所有容器列表",tags=["container"],dependencies=[Depends(verify_token)])
 async def root():
     return {
         "code": status.HTTP_200_OK,
@@ -42,7 +42,7 @@ async def root():
     }
 
 
-@api_router.post("/container/start/{container_name}", summary="启动容器",dependencies=[Depends(verify_token)])
+@api_router.post("/container/start/{container_name}", summary="启动容器",tags=["container"],dependencies=[Depends(verify_token)])
 async def root(container_name: str):
     if start_container(container_name):
         return {
@@ -56,7 +56,7 @@ async def root(container_name: str):
         }
 
 
-@api_router.post("/container/stop/{container_name}", summary="停止容器",dependencies=[Depends(verify_token)])
+@api_router.post("/container/stop/{container_name}", summary="停止容器",tags=["container"],dependencies=[Depends(verify_token)])
 async def root(container_name: str):
     if stop_container(container_name):
         return {
@@ -71,7 +71,7 @@ async def root(container_name: str):
 
 
 # 获取指定容器日志
-@api_router.get("/container/logs/{container_name}", summary="获取指定容器日志",dependencies=[Depends(verify_token)])
+@api_router.get("/container/logs/{container_name}", summary="获取指定容器日志",tags=["container"],dependencies=[Depends(verify_token)])
 async def root(container_name: str):
     print("获取指定容器日志")
     return {
@@ -86,7 +86,7 @@ async def root(container_name: str):
     }
 
 
-@api_router.delete("/container/delete/{container_name}", summary="删除指定容器",dependencies=[Depends(verify_token)])
+@api_router.delete("/container/delete/{container_name}", summary="删除指定容器",tags=["container"],dependencies=[Depends(verify_token)])
 async def root(container_name: str):
     if remove_container(container_name):
         return {
@@ -101,7 +101,7 @@ async def root(container_name: str):
 
 
 # 获取系统信息
-@api_router.get("/system/info", summary="获取系统信息",dependencies=[Depends(verify_token)])
+@api_router.get("/system/info", summary="获取系统信息",tags=["system"],dependencies=[Depends(verify_token)])
 async def root():
     return {
         "code": 200,
@@ -117,7 +117,7 @@ class CommandItem(BaseModel):
     command: list | None = None
 
 # 向指定容器发送终端命令
-@api_router.post("/container/terminal", summary="向指定容器发送终端命令",dependencies=[Depends(verify_token)])
+@api_router.post("/container/terminal", summary="向指定容器发送终端命令",tags=["container"],dependencies=[Depends(verify_token)])
 async def root(commandItem: CommandItem):
     print(commandItem.dict())  # 使用 .dict() 方法将 Pydantic 模型转换为字典
     data = run_command_and_print_output(commandItem.containerName, commandItem.command)
@@ -135,7 +135,7 @@ async def root(commandItem: CommandItem):
         }
     
 # 重置全局变量存储目录状态的辅助方法
-@api_router.get("/reset_directory", summary="重置全局变量存储目录状态",dependencies=[Depends(verify_token)])
+@api_router.get("/reset_directory", summary="重置容器终端的全局变量存储目录状态",tags=["container"],dependencies=[Depends(verify_token)])
 async def reset_directory():
     return json.dumps(reset_global_variable_storage_directory_status())
     
@@ -204,7 +204,7 @@ async def find_user(user_id: int):
         }
     
 # 登录
-@api_router.post("/login", tags=["user"], summary="用户登录")
+@api_router.post("/login", tags=["user"], summary="用户登录",dependencies=[Depends(verify_token)])
 async def login(user: UserLogin):
     rows = query_data('users', f"name='{user.name}' and password='{user.password}'")
     print("rows", rows)
@@ -235,7 +235,7 @@ async def login(user: UserLogin):
         }
 
 # 注册
-@api_router.post("/register", tags=["user"], summary="用户注册")
+@api_router.post("/register", tags=["user"], summary="用户注册",dependencies=[Depends(verify_token)])
 async def register(user: UserRegister):
     rows = query_data('users', f"name='{user.name}'")
     print("rows:",rows,type(rows),len(rows))
@@ -255,7 +255,7 @@ async def register(user: UserRegister):
 
 
 # 查询表中的是否存在数据,用于判断是否初始化系统
-@api_router.get("/is_initial_sys", tags=["user"], summary="查询表中的是否存在数据")
+@api_router.get("/is_initial_sys", tags=["user"], summary="查询表中的是否存在数据",dependencies=[Depends(verify_token)])
 def is_initial_sys():
     rows = query_data('users')
     if len(rows)>0:
@@ -270,10 +270,13 @@ def is_initial_sys():
         }
     
 
+####################### 远程服务器相关 #######################
+@api_router.post("/server/list", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
+
 
 
 # 远程ssh
-@api_router.post("/ssh", tags=["ssh"], summary="远程ssh")
+@api_router.post("/ssh", tags=["server"], summary="远程ssh",dependencies=[Depends(verify_token)])
 async def ssh(ssh: SSH):
     return {
         "code":200,
