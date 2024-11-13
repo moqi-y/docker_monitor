@@ -19,3 +19,10 @@ class UserRegister(BaseModel):
     @property
     def updated_at(self) -> datetime:
         return datetime.now()
+
+
+class SSH(BaseModel):
+    ip: str
+    username: str
+    password: str
+    command: str

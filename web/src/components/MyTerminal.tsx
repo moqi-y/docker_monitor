@@ -33,7 +33,6 @@ function MyTerminal(props: any) {
           allowTabs={false}
           style={{ fontWeight: "normal", fontSize: "1.1em"}}
           commands={{
-            'open-google': () => window.open('https://www.google.com/', '_blank'),
             showmsg: showMsg,
             popup: () => alert('Terminal in React')
           }}

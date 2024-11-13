@@ -6,7 +6,8 @@ from utils.docker_options import start_container, stop_container, remove_contain
 from utils.sys_options import get_system_info
 from sql_app.curd import *
 from utils.jwt_token import create_access_token, verify_token
-from router.model import UserLogin,UserRegister
+from router.model import SSH, UserLogin,UserRegister
+from utils.remote_ssh import ssh_command
 
 api_router = APIRouter()
 
@@ -268,4 +269,18 @@ def is_initial_sys():
             "message": "不存在数据"
         }
     
-    
+
+
+
+# 远程ssh
+@api_router.post("/ssh", tags=["ssh"], summary="远程ssh")
+async def ssh(ssh: SSH):
+    # ssh_command("10.13.6.47","root","Yuy@123","ls -l")
+    return {
+        "code":200,
+        "message":"success",
+        "data":{
+            "input":ssh.command,
+            "output":ssh_command(ssh.ip, ssh.username, ssh.password, ssh.command)
+        }
+    }
