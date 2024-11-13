@@ -26,3 +26,10 @@ class SSH(BaseModel):
     username: str
     password: str
     command: str
+
+
+class Server(BaseModel):
+    ip: str
+    username: str
+    password: str
+    remark: str | None = None

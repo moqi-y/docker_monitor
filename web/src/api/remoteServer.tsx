@@ -3,9 +3,9 @@ import http from "@/utils/http";
 /**
  * 获取远程服务器列表
  */
-export const getRemoteServerList = () => {
+export const getRemoteServerList = (query: string) => {
     return http({
-        url: "/api/server/list",
+        url: "/api/server/list/" + query,
         method: "get"
     })
 }
@@ -15,7 +15,7 @@ export const getRemoteServerList = () => {
  * 远程ssh
  * @returns 获取远程服务器的ssh
  */
-export const sendSSH = (data) => {
+export const sendSSH = (data:any) => {
     return http({
         url: "/api/ssh",
         method: "post",

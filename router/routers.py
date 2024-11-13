@@ -6,7 +6,7 @@ from utils.docker_options import start_container, stop_container, remove_contain
 from utils.sys_options import get_system_info
 from sql_app.curd import *
 from utils.jwt_token import create_access_token, verify_token
-from router.model import SSH, UserLogin,UserRegister
+from router.model import SSH, Server, UserLogin,UserRegister
 from utils.remote_ssh import ssh_command
 
 api_router = APIRouter()
@@ -271,15 +271,56 @@ def is_initial_sys():
     
 
 ####################### 远程服务器相关 #######################
-@api_router.get("/server/list", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
-def server_list():
-    rows = query_data('server')
+@api_router.get("/server/list/{isRemeber}", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
+def server_list(isRemeber:bool = False):
+    rows = query_data('servers')
+    serverList = []
+    for row in rows:
+        server ={
+            "serverId": row[0],
+            "ip": row[1],
+            "username": row[2],
+            "password": row[3] if isRemeber else None,
+            "remark": row[4]
+        }
+        serverList.append(server)
     return {
         "code": status.HTTP_200_OK,
         "message": "成功",
-        "data": rows
+        "data": serverList
     }
 
+# 添加服务器
+@api_router.post("/server/add", tags=["server"], summary="添加服务器",dependencies=[Depends(verify_token)])
+def server_add(server: Server):
+    # 查询是否已经存在该服务器
+    rows = query_data('servers', {'ip': server.ip})
+    if len(rows) > 0:
+        return {
+            "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+            "message": "该服务器已经存在"
+        }
+    else:
+        try:
+            add_data('server', server.model_dump())
+            return {
+                "code": status.HTTP_200_OK,
+                "message": "成功"
+            }
+        except:
+            return {
+                "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
+                "message": "添加失败"
+            }
+
+# 删除服务器
+@api_router.delete("/server/delete", tags=["server"], summary="删除服务器",dependencies=[Depends(verify_token)])
+def server_delete(server: Server):
+    delete_data('servers', {'ip': server.ip})
+    return {
+        "code": status.HTTP_200_OK,
+        "message": "成功"
+    }
 
 
 # 远程ssh
