@@ -10,6 +10,27 @@ export const getRemoteServerList = (query: string) => {
     })
 }
 
+/**
+ * 添加远程服务器
+ */
+export const addRemoteServer = (data: any) => {
+    return http({
+        url: "/api/server/add",
+        method: "post",
+        data
+    })
+}
+
+/**
+ * 删除远程服务器
+ **/
+export const deleteRemoteServer = (query: string) => {
+    return http({
+        url: "/api/server/delete/" + query,
+        method: "delete"
+    })
+}
+
 
 /**
  * 远程ssh

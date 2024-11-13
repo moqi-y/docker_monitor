@@ -294,7 +294,7 @@ def server_list(isRemeber:bool = False):
 @api_router.post("/server/add", tags=["server"], summary="添加服务器",dependencies=[Depends(verify_token)])
 def server_add(server: Server):
     # 查询是否已经存在该服务器
-    rows = query_data('servers', {'ip': server.ip})
+    rows = query_data('servers', f"ip='{server.ip}'")
     if len(rows) > 0:
         return {
             "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
@@ -302,21 +302,21 @@ def server_add(server: Server):
         }
     else:
         try:
-            add_data('server', server.model_dump())
+            add_data('servers', server.model_dump())
             return {
                 "code": status.HTTP_200_OK,
-                "message": "成功"
+                "message": "操作成功"
             }
-        except:
+        except Exception as e:
             return {
                 "code": status.HTTP_203_NON_AUTHORITATIVE_INFORMATION,
-                "message": "添加失败"
+                "message": "添加失败" + str(e)
             }
 
 # 删除服务器
-@api_router.delete("/server/delete", tags=["server"], summary="删除服务器",dependencies=[Depends(verify_token)])
-def server_delete(server: Server):
-    delete_data('servers', {'ip': server.ip})
+@api_router.delete("/server/delete/{ip}", tags=["server"], summary="删除服务器",dependencies=[Depends(verify_token)])
+def server_delete(ip: str):
+    delete_data('servers', f"ip='{ip}'")
     return {
         "code": status.HTTP_200_OK,
         "message": "成功"
