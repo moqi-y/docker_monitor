@@ -275,7 +275,6 @@ def is_initial_sys():
 # 远程ssh
 @api_router.post("/ssh", tags=["ssh"], summary="远程ssh")
 async def ssh(ssh: SSH):
-    # ssh_command("10.13.6.47","root","Yuy@123","ls -l")
     return {
         "code":200,
         "message":"success",
