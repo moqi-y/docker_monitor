@@ -12,6 +12,7 @@ import {
     DockerOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd'
+import AiReboot from '@/components/AiReboot';
 
 const { Header, Content, Footer, Sider } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -82,6 +83,7 @@ export default function App(props: any) {
                     </Header>
                     <Content style={{ margin: '0 16px' }}>
                         <Outlet />
+                        <AiReboot></AiReboot>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
                         容器管理系统 ©{new Date().getFullYear()} Created by gqh & yz
