@@ -96,19 +96,23 @@ function RemoteContainer() {
         setServerInfo({ ...serverInfo, password: tempPassword });
         setIsShowTerminal(true);
         setTempPassword('');
+        getList();
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
         setTempPassword('');
+        getList();
     };
 
     const showTerminal = (e: any) => {
         setIsModalOpen(true);
         setServerInfo(e);
+        getList();
     }
     const handleTerminalCancel = () => {
         setIsShowTerminal(false);
+        getList();
     }
 
     // 新增
