@@ -31,5 +31,4 @@ class SSH(BaseModel):
 class Server(BaseModel):
     ip: str
     username: str
-    password: str
     remark: str | None = None

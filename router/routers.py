@@ -1,6 +1,8 @@
+from datetime import datetime
 import json
 from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
+from func.format import format_time
 from func.get_all_dockers import get_all_images, get_all_containers
 from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output,reset_global_variable_storage_directory_status
 from utils.sys_options import get_system_info
@@ -204,7 +206,7 @@ async def find_user(user_id: int):
         }
     
 # 登录
-@api_router.post("/login", tags=["user"], summary="用户登录",dependencies=[Depends(verify_token)])
+@api_router.post("/login", tags=["user"], summary="用户登录")
 async def login(user: UserLogin):
     rows = query_data('users', f"name='{user.name}' and password='{user.password}'")
     print("rows", rows)
@@ -271,8 +273,8 @@ def is_initial_sys():
     
 
 ####################### 远程服务器相关 #######################
-@api_router.get("/server/list/{isRemeber}", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
-def server_list(isRemeber:bool = False):
+@api_router.get("/server/list", tags=["server"], summary="服务器列表",dependencies=[Depends(verify_token)])
+def server_list():
     rows = query_data('servers')
     serverList = []
     for row in rows:
@@ -280,8 +282,8 @@ def server_list(isRemeber:bool = False):
             "serverId": row[0],
             "ip": row[1],
             "username": row[2],
-            "password": row[3] if isRemeber else None,
-            "remark": row[4]
+            "remark": row[4],
+            "lastOperateTime": row[6],
         }
         serverList.append(server)
     return {
@@ -326,6 +328,7 @@ def server_delete(ip: str):
 # 远程ssh
 @api_router.post("/ssh", tags=["server"], summary="远程ssh",dependencies=[Depends(verify_token)])
 async def ssh(ssh: SSH):
+    update_data('servers', {"last_operate_time":datetime.now().strftime("%Y-%m-%d %H:%M:%S")}, f"ip='{ssh.ip}'")
     return {
         "code":200,
         "message":"success",

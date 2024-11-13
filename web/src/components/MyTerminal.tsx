@@ -15,7 +15,7 @@ function MyTerminal(props: any) {
   };
 
   useEffect(() => {
-    resetPath();
+    props.type == 1 && resetPath();
   }, [props.isShowTerminal])
 
   return (

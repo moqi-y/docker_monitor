@@ -3,9 +3,9 @@ import http from "@/utils/http";
 /**
  * 获取远程服务器列表
  */
-export const getRemoteServerList = (query: string) => {
+export const getRemoteServerList = () => {
     return http({
-        url: "/api/server/list/" + query,
+        url: "/api/server/list",
         method: "get"
     })
 }

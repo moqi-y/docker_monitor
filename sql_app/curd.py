@@ -27,10 +27,13 @@ def delete_data(table_name, condition):
 
 # 修改数据
 def update_data(table_name, data, condition):
-    set_clause = ', '.join([f"{key} = %s" for key in data.keys()])
+    print("update_data",table_name, data, condition)
+    set_clause = ', '.join([f"{key} = ?" for key in data.keys()])
     sql = f"UPDATE {table_name} SET {set_clause} WHERE {condition}"
     cursor.execute(sql, tuple(data.values()))
     conn.commit()
+# 示例
+# add_data('users', {'name': 'Alice', 'age': 25, 'email': 'alice@example.com'}, 'id=1')
 
 # 查询数据
 def query_data(table_name, condition=None):

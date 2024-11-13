@@ -1,6 +1,6 @@
 import MyTerminal from "@/components/MyTerminal";
 import { useState, useEffect } from "react";
-import { Button, Col, Drawer, Flex, Form, Input, message, Row, Space, Table, } from 'antd';
+import { Button, Col, Drawer, Flex, Form, Input, message, Modal, Popconfirm, Row, Space, Table, } from 'antd';
 import { CloudServerOutlined, CodeOutlined, DeleteOutlined, LockOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { FormProps, TableProps } from 'antd';
 import type { FormInstance } from 'antd/es/form';
@@ -15,8 +15,8 @@ function RemoteContainer() {
         getList()
     }, [])
     const getList = () => {
-        getRemoteServerList('false').then((res: any) => {
-            setData(res.data)
+        getRemoteServerList().then((res: any) => {
+            setData(res?.data)
             setLoading(false)
         })
     }
@@ -24,7 +24,7 @@ function RemoteContainer() {
     const [serverInfo, setServerInfo] = useState<any>({})
     const [terminalName, setTerminalName] = useState('')
     const [form] = Form.useForm(); // 创建 form 实例
-
+    const [tempPassword, setTempPassword] = useState('')
     const columns: TableProps<object>['columns'] = [
         {
             title: '序号',
@@ -53,6 +53,11 @@ function RemoteContainer() {
             key: 'remark',
         },
         {
+            title: '最近操作时间',
+            dataIndex: 'lastOperateTime',
+            key: 'lastOperateTime'
+        },
+        {
             title: '操作',
             key: 'operation',
             render: (_, record) =>
@@ -64,17 +69,43 @@ function RemoteContainer() {
                     {/* <Button color="primary" variant="filled" icon={<EditOutlined />}>
                         编辑
                     </Button> */}
-                    <Button color="danger" variant="filled" icon={<DeleteOutlined />} onClick={()=>deleteServer(record)}>
-                        删除
-                    </Button>
+                    <Popconfirm
+                        title="确认删除吗？"
+                        description="确认删除该服务器吗?"
+                        onConfirm={() => deleteServer(record)}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button color="danger" variant="filled" icon={<DeleteOutlined />}>
+                            删除
+                        </Button>
+                    </Popconfirm>
                 </Space>
         }
     ];
 
-    const showTerminal = (e: any) => {
-        setTerminalName(e.ip);
-        setServerInfo(e);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOk = () => {
+        if(!tempPassword) {
+            message.error('请输入密码');
+            return;
+        };
+        setIsModalOpen(false);
+        setTerminalName(serverInfo.ip);
+        setServerInfo({ ...serverInfo, password: tempPassword });
         setIsShowTerminal(true);
+        setTempPassword('');
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        setTempPassword('');
+    };
+
+    const showTerminal = (e: any) => {
+        setIsModalOpen(true);
+        setServerInfo(e);
     }
     const handleTerminalCancel = () => {
         setIsShowTerminal(false);
@@ -89,9 +120,9 @@ function RemoteContainer() {
         setIsShowAddServer(false);
     }
 
-    const confirmAddServer = async (e:any) => {
+    const confirmAddServer = async (e: any) => {
         const values = await form.validateFields();
-        const res:any = await addRemoteServer(values);
+        const res: any = await addRemoteServer(values);
         if (res.code === 200) {
             message.success("添加成功");
         } else {
@@ -102,8 +133,8 @@ function RemoteContainer() {
     }
 
     // 删除
-    const deleteServer = async (e:any) => {
-        const res:any = await deleteRemoteServer(e.ip);
+    const deleteServer = async (e: any) => {
+        const res: any = await deleteRemoteServer(e.ip);
         if (res.code === 200) {
             message.success("删除成功");
         }
@@ -139,7 +170,7 @@ function RemoteContainer() {
                     </Space>
                 }
             >
-                <Form layout="vertical" hideRequiredMark onFinish={confirmAddServer}  form={form}  >
+                <Form layout="vertical" hideRequiredMark onFinish={confirmAddServer} form={form}  >
                     <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
@@ -162,7 +193,7 @@ function RemoteContainer() {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={16}>
+                    {/* <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
                                 name="password"
@@ -172,7 +203,7 @@ function RemoteContainer() {
                                  <Input.Password addonBefore={<LockOutlined />}  placeholder="请输入登录密码"/>
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row gutter={16}>
                         <Col span={24}>
                             <Form.Item
@@ -185,7 +216,9 @@ function RemoteContainer() {
                     </Row>
                 </Form>
             </Drawer>
-
+            <Modal title="登入密码" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={"确定"} cancelText={"取消"}>
+                <Input.Password required={true} addonBefore={<LockOutlined />} placeholder="请输入服务器登录密码" value={tempPassword} onChange={(e) => setTempPassword(e.target.value)} />
+            </Modal>
         </div>
     )
 }
