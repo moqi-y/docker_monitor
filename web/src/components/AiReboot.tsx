@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Card, FloatButton, Input, Space } from 'antd';
 import { CloseOutlined, CommentOutlined, LoadingOutlined, SendOutlined } from '@ant-design/icons';
 import './AiReboot.css'
+import ChatBox from './ChatBox';
 const { TextArea } = Input;
 
 function AiReboot(props: any) {
@@ -30,15 +31,9 @@ function AiReboot(props: any) {
             {isShow &&
                 <Card title={<span style={{ color: '#1677ff'}}>AI 智能小助手</span>} extra={<a onClick={onClick}><CloseOutlined /></a>} className='chat-box'>
                     <div className='chat-content'>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
-                        <h1>能助手</h1>
+                        <ChatBox position={'right'} message={'你好，我是AI智能助手，有什么可以帮助你的吗？'} avatar='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' time="2024-11-13 16:34:45" sender="admin"/>
+                        <ChatBox position={'left'} message={'你好，我是AI智能助手，有什么可以帮助你的吗？'} avatar='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
+                        <ChatBox position={'left'} message={'你好，我是AI智能助手，有什么可以帮助你的吗？'} avatar='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
                     </div>
                     <div className='chat-input'>
                         <Space direction="horizontal" align="center">

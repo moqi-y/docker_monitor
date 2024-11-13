@@ -1,0 +1,22 @@
+.flex{
+  display: flex;
+  flex-direction: r;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.items-left{
+  justify-self: start;
+}
+
+.items-right{
+  justify-self: end;
+}
+
+.avatar-img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
