@@ -92,10 +92,13 @@ function AiReboot(props: any) {
         setChatList([...chatList, {
             message: msg,
             sender: 'User',
+            position: 'right',
             avatar: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain'
         }])
-        //class为chat-content的滚动条滚动到底部
-        scrollToBottomSmooth();
+        //等待消息发送完毕并渲染后，将滚动条滚动到底部
+        setTimeout(() => {
+            scrollToBottomSmooth();
+        }, 200);
     }
 
     function scrollToBottomSmooth() {

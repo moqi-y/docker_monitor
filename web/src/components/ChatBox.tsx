@@ -9,14 +9,14 @@ interface Props {
 
 function ChatBox(props: Props) {
     return (
-        <div className={`flex items-${props.position} gap-2`}>
-            {props.position == 'left' && <div className="flex items-center gap-2">
+        <div className={`flex items-${props.sender == 'AI'?'left':'right'} gap-2`}>
+            {props.sender == 'AI' && <div className="flex items-center gap-2">
                 <img className="avatar-img" src={props.avatar} alt="Avatar" />
             </div>}
             <div className="flex message-box">
                 <p className="text-sm">{props.message}</p>
             </div>
-            {props.position == 'right' && <div className="flex items-center gap-2">
+            {props.sender == 'User' && <div className="flex items-center gap-2">
                 <img className="avatar-img" src={props.avatar} alt="Avatar" />
             </div>}
         </div>
