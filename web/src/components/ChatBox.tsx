@@ -1,4 +1,5 @@
 import './ChatBox.css'
+import MyMarkdown from './MyMarkdown';
 
 interface Props {
     position: string; // "left" or "right"
@@ -14,7 +15,7 @@ function ChatBox(props: Props) {
                 <img className="avatar-img" src={props.avatar} alt="Avatar" />
             </div>}
             <div className="flex message-box">
-                <p className="text-sm">{props.message}</p>
+                <MyMarkdown markdownContent={props.message} />
             </div>
             {props.sender == 'User' && <div className="flex items-center gap-2">
                 <img className="avatar-img" src={props.avatar} alt="Avatar" />
