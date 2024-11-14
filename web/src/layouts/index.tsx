@@ -74,7 +74,7 @@ export default function App(props: any) {
                         <div className='userinfo'>
                             <Dropdown menu={{ items:DropdownList }}>
                                 <Space>
-                                    <Avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" />
+                                    <Avatar src="https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain" />
                                     <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span>
                                     <DownOutlined />
                                 </Space>
