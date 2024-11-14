@@ -88,16 +88,23 @@ function AiReboot(props: any) {
     })
 
 
-    const pushMessage = (msg:string) => {
+    const pushMessage = (msg: string) => {
         setChatList([...chatList, {
             message: msg,
             sender: 'User',
             avatar: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain'
         }])
         //class为chat-content的滚动条滚动到底部
-        const chatContent = document.getElementById('chat-content');
+        scrollToBottomSmooth();
+    }
+
+    function scrollToBottomSmooth() {
+        const chatContent = document.getElementById('chat-con');
         if (chatContent) {
-            chatContent.scrollTop = chatContent.scrollHeight; // 滚动条滚动到底部
+            chatContent.scrollTo({
+                top: chatContent.scrollHeight,
+                behavior: 'smooth'
+            }); // 丝滑滚动条滚动到底部
         }
     }
 
@@ -108,7 +115,7 @@ function AiReboot(props: any) {
             </div>
             {isShow &&
                 <Card title={<span style={{ color: '#1677ff' }}>AI 智能小助手</span>} extra={<a onClick={onClick}><CloseOutlined /></a>} className='chat-box'>
-                    <div className='chat-content'>
+                    <div className='chat-content' id='chat-con'>
                         {chat}
                     </div>
                     <div className='chat-input'>
