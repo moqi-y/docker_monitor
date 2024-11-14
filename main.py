@@ -6,6 +6,7 @@ from fastapi import applications
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.middleware.cors import CORSMiddleware
 from router.routers import api_router
+from utils.ai_chat import send_chat_request
 
 def swagger_monkey_patch(*args, **kwargs):
     return get_swagger_ui_html(
@@ -38,8 +39,11 @@ app.include_router(api_router, prefix="/api")
 
 @app.get("/hello/{name}", tags=["test"])
 async def say_hello(name: str):
-    print("say_hello", name)
-    return {"message": f"Hello {name}"}
+    # print("say_hello", name)
+    # return {"message": f"Hello {name}"}
+    response_text = send_chat_request()
+    print("response_text:", response_text)
+    return {"message": response_text}
     
 
 

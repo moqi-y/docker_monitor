@@ -4,12 +4,15 @@ from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
 from func.format import format_time
 from func.get_all_dockers import get_all_images, get_all_containers
+from utils.ai_chat import send_chat_request
 from utils.docker_options import start_container, stop_container, remove_container, get_container_logs,run_command_and_print_output,reset_global_variable_storage_directory_status
 from utils.sys_options import get_system_info
 from sql_app.curd import *
 from utils.jwt_token import create_access_token, verify_token
 from router.model import SSH, Server, UserLogin,UserRegister
 from utils.remote_ssh import ssh_command
+
+from fastapi.responses import StreamingResponse
 
 api_router = APIRouter()
 
@@ -337,3 +340,9 @@ async def ssh(ssh: SSH):
             "output":ssh_command(ssh.ip, ssh.username, ssh.password, ssh.command)
         }
     }
+
+
+# ####################### AI对话 #########################
+@api_router.get("/stream-chat", tags=["chat"], summary="AI对话")
+def stream_chat():
+    return StreamingResponse(send_chat_request(), media_type="text/plain")

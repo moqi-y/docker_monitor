@@ -43,3 +43,4 @@ build
 
 database/monitor.db
 .idea/vcs.xml
+.env

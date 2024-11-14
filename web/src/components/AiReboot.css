@@ -61,7 +61,6 @@
     background: #555; /* 鼠标悬停时滑块颜色 */
   }
 
-  
   .input-box::-webkit-scrollbar {
     width: 6px; /* 滚动条宽度 */
   }
@@ -77,3 +76,4 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555; /* 鼠标悬停时滑块颜色 */
   }
+
