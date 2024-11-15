@@ -1,12 +1,15 @@
+// src/components/AiReboot.tsx
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Button, Card, FloatButton, Input, Space } from 'antd';
 import { CloseOutlined, CommentOutlined, LoadingOutlined, SendOutlined } from '@ant-design/icons';
+import chatService from '@/api/aiChat';
 import './AiReboot.css';
 import ChatBox from './ChatBox';
 
 const { TextArea } = Input;
+const AI_AVATAR = 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png';
+const USER_AVATAR = 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain';
 
-// Define TypeScript interfaces
 interface Message {
     message: string;
     sender: 'AI' | 'User';
@@ -14,51 +17,27 @@ interface Message {
 }
 
 const INITIAL_MESSAGES: Message[] = [
-    { 
-        message: '你好，我是AI助手，有什么可以帮助你的吗？', 
-        sender: 'AI', 
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' 
-    },
-    { 
-        message: '你好，我想了解一下关于你的信息', 
-        sender: 'User', 
-        avatar: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain' 
-    },
-    { 
-        message: '我是一个AI助手，可以回答你的问题', 
-        sender: 'AI', 
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' 
-    },
-    { 
-        message: '那你能帮我写一篇关于人工智能的文章吗？', 
-        sender: 'User', 
-        avatar: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain' 
-    },
-    { 
-        message: '当然可以，请告诉我你的需求', 
-        sender: 'AI', 
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' 
+    {
+        message: '你好，我是AI助手，有什么可以帮助你的吗？',
+        sender: 'AI',
+        avatar: AI_AVATAR
     }
 ];
 
-const AI_AVATAR = 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png';
-const USER_AVATAR = 'https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain';
 
-function AiReboot(props: any) {
+
+function AiReboot() {
     const [isShow, setIsShow] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [chatList, setChatList] = useState<Message[]>(INITIAL_MESSAGES);
-    
+
     const chatContentRef = useRef<HTMLDivElement>(null);
     const abortControllerRef = useRef<AbortController | null>(null);
 
-    // Cleanup on unmount
     useEffect(() => {
         return () => {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
+            abortControllerRef.current?.abort();
         };
     }, []);
 
@@ -71,7 +50,6 @@ function AiReboot(props: any) {
         }
     }, []);
 
-    // Scroll to bottom when new messages arrive
     useEffect(() => {
         scrollToBottom();
     }, [chatList, scrollToBottom]);
@@ -80,41 +58,22 @@ function AiReboot(props: any) {
         setIsShow(prev => !prev);
     }, []);
 
-    const getAIResponse = useCallback(async () => {
+    const handleAIResponse = useCallback(async (userMsg: string) => {
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
-        
+
         abortControllerRef.current = new AbortController();
-        
-        try {
-            const response = await fetch('http://localhost:8000/api/stream-chat', {
-                signal: abortControllerRef.current.signal
-            });
 
-            if (!response.body) {
-                throw new Error('Response body is not a stream');
-            }
+        // Add initial AI message placeholder
+        setChatList(prev => [...prev, {
+            message: '',
+            sender: 'AI',
+            avatar: AI_AVATAR
+        }]);
 
-            const reader = response.body.getReader();
-            let accumulatedResponse = '';
-
-            // Add initial AI message placeholder
-            setChatList(prev => [...prev, {
-                message: '...',
-                sender: 'AI',
-                avatar: AI_AVATAR
-            }]);
-
-            while (true) {
-                const { done, value } = await reader.read();
-                
-                if (done) break;
-                
-                const chunk = new TextDecoder().decode(value, { stream: true });
-                accumulatedResponse += chunk;
-
-                // Update the last message in real-time
+        const response = await chatService.streamChat(
+            (accumulatedResponse: any) => {
                 setChatList(prev => {
                     const newList = [...prev];
                     newList[newList.length - 1] = {
@@ -124,20 +83,13 @@ function AiReboot(props: any) {
                     };
                     return newList;
                 });
-            }
-
-            return accumulatedResponse;
-        } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-                console.log('Request aborted');
-            } else {
-                console.error('Error fetching AI response:', error);
-                setChatList(prev => [...prev, {
-                    message: '抱歉，我现在无法回答。请稍后再试。',
-                    sender: 'AI',
-                    avatar: AI_AVATAR
-                }]);
-            }
+            },
+            abortControllerRef.current,
+            userMsg
+        );
+        setInputValue('');
+        if (!response?.success) {
+            // Handle error
         }
     }, []);
 
@@ -145,24 +97,20 @@ function AiReboot(props: any) {
         if (!inputValue.trim() || isLoading) return;
 
         setIsLoading(true);
-        
-        // Add user message
+
         setChatList(prev => [...prev, {
             message: inputValue,
             sender: 'User',
             avatar: USER_AVATAR
         }]);
-        
-        setInputValue('');
 
         try {
-            await getAIResponse();
+            await handleAIResponse(inputValue);
         } finally {
             setIsLoading(false);
         }
-    }, [inputValue, isLoading, getAIResponse]);
+    }, [inputValue, isLoading, handleAIResponse]);
 
-    // Handle Enter key press
     const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -173,27 +121,27 @@ function AiReboot(props: any) {
     return (
         <>
             <div>
-                <FloatButton 
-                    icon={<CommentOutlined />} 
-                    type="primary" 
+                <FloatButton
+                    icon={<CommentOutlined />}
+                    type="primary"
                     className='box'
                     onClick={toggleChat}
                 />
             </div>
             {isShow && (
-                <Card 
+                <Card
                     title={<span style={{ color: '#1677ff' }}>AI 智能小助手</span>}
                     extra={<a onClick={toggleChat}><CloseOutlined /></a>}
                     className='chat-box'
                 >
-                    <div className='chat-content' id='chat-con' ref={chatContentRef}>
+                    <div className='chat-content' ref={chatContentRef}>
                         {chatList.map((item, index) => (
                             <ChatBox
-                                key={`${index}-${item.message.length}`}
-                                position={item.sender === 'AI' ? 'left' : 'right'}
-                                message={item.message}
-                                sender={item.sender}
-                                avatar={item.avatar}
+                                key={`${index}-${item.message?.length}`}
+                                position={item?.sender === 'AI' ? 'left' : 'right'}
+                                message={item?.message}
+                                sender={item?.sender}
+                                avatar={item?.avatar}
                             />
                         ))}
                     </div>
@@ -208,10 +156,10 @@ function AiReboot(props: any) {
                                 autoSize={{ minRows: 3, maxRows: 3 }}
                                 disabled={isLoading}
                             />
-                            <Button 
+                            <Button
                                 disabled={isLoading || !inputValue.trim()}
-                                icon={isLoading ? 
-                                    <LoadingOutlined style={{ fontSize: '20px' }} /> : 
+                                icon={isLoading ?
+                                    <LoadingOutlined style={{ fontSize: '20px' }} /> :
                                     <SendOutlined style={{ fontSize: '20px' }} />
                                 }
                                 className='send-button'

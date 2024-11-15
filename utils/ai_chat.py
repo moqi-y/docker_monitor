@@ -6,7 +6,7 @@ import json
 # 加载.env文件中的环境变量
 load_dotenv()
 
-def send_chat_request():
+def send_chat_request(userMsg):
     # 构造 client
     client = OpenAI(
         api_key=os.environ.get("API_SECRET"), # 混元 APIKey
@@ -19,7 +19,7 @@ def send_chat_request():
         messages=[
             {
                 "role": "user",
-                "content": "你认为环保的目的是什么呢",
+                "content": userMsg,
             },
         ],
         stream=True,

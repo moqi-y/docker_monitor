@@ -344,5 +344,5 @@ async def ssh(ssh: SSH):
 
 # ####################### AI对话 #########################
 @api_router.get("/stream-chat", tags=["chat"], summary="AI对话")
-def stream_chat():
-    return StreamingResponse(send_chat_request(), media_type="text/plain")
+def stream_chat(userMsg:object):
+    return StreamingResponse(send_chat_request(userMsg), media_type="text/plain")
