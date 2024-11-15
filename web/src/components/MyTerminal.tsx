@@ -3,7 +3,7 @@ import { Button, Modal } from "antd";
 import {useState,useEffect} from 'react';
 import './MyTerminal.css'
 import { sendCommand } from '@/api/container';
-import {resetPath} from '@/api/MyTerminal'
+import {resetPath} from '@/api/myTerminalApi'
 function MyTerminal(props: any) {
   const showMsg = () => 'Hello World';
 
