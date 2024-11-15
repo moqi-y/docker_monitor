@@ -22,7 +22,7 @@
 }
 
 .message-box {
-    max-width: 500px;
+    max-width: 600px;
     word-wrap: break-word;
     word-break: break-all;
     border: 1px solid #ccc;
