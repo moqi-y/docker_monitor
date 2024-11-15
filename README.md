@@ -1,4 +1,4 @@
-# 容器管理系统
+# 运维管理平台
 - 服务端基于Python的Fastapi框架
 - Web端基于React + Umi框架
 

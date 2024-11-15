@@ -18,8 +18,8 @@ def swagger_monkey_patch(*args, **kwargs):
 applications.get_swagger_ui_html = swagger_monkey_patch
 
 app = FastAPI(
-    title="容器管理系统",
-    description="容器管理系统开发接口文档",
+    title="运维管理平台",
+    description="运维管理平台开发接口文档",
     version="1.0.0",
 )
 

@@ -65,7 +65,7 @@ export default function App(props: any) {
                 <Sider collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className="logo-vertical">
                         <img src="./logo.svg" alt="logo" className='logo' />
-                        容器管理系统
+                        运维管理平台
                     </div>
                     <Menu onSelect={onSelect} theme="dark" mode="inline" items={items} />
                 </Sider>
@@ -86,7 +86,7 @@ export default function App(props: any) {
                         <AiReboot></AiReboot>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
-                        容器管理系统 ©{new Date().getFullYear()} Created by gqh & yz
+                        运维管理平台 ©{new Date().getFullYear()} Created by gqh & yz
                     </Footer>
                 </Layout>
             </Layout>

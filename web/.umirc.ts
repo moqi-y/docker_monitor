@@ -24,5 +24,5 @@ export default defineConfig({
     links: [
         { rel: 'icon', href: './favicon.ico' },
     ],
-    title: '容器管理系统'
+    title: '运维管理平台'
 });
