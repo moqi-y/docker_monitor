@@ -30,7 +30,7 @@ const Login = () => {
         <div className='login-container'>
             <Card className="w-full max-w-md" style={{ width: '500px', margin: '0 auto' }}>
                 <div className="text-center mb-8">
-                    <Title level={2}>容器后台管理系统</Title>
+                    <Title level={2}>运维管理平台</Title>
                     <Text type="secondary">请登录您的账号,默认admin/admin123</Text>
                 </div>
 
