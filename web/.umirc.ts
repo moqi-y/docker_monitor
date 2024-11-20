@@ -17,7 +17,7 @@ export default defineConfig({
         '/api': {
             'port': 8001,
             // 'target': 'http://10.13.6.47:8000',
-            'target': 'http://localhost:8000',
+            'target': 'http://192.168.124.4:8000',
             'changeOrigin': true,
             // 'pathRewrite': {'^/api': ''},
         },

@@ -9,7 +9,7 @@ export class ChatService {
     private baseUrl: string;
 
     private constructor() {
-        this.baseUrl = 'http://localhost:8000/api';
+        this.baseUrl = 'http://192.168.124.4:8000/api';
     }
 
     public static getInstance(): ChatService {
