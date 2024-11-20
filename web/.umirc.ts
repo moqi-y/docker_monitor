@@ -11,6 +11,7 @@ export default defineConfig({
         { path: "/tools", component: "tools"},
         { path: "/source", component: "source"},
         { path: "/warnning", component: "warnning"},
+        { path: "/note", component: "note"},
     ],
     npmClient: 'npm',
     proxy: {

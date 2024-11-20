@@ -1,7 +1,7 @@
 import { Link, Outlet } from 'umi';
 import './index.less';
 import React, { useState } from 'react';
-import { DownOutlined, FundViewOutlined, LoginOutlined } from '@ant-design/icons';
+import { AlertOutlined, DownOutlined, FundOutlined, FundViewOutlined, LoginOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, Space } from 'antd';
 import { history } from 'umi';
 import {
@@ -36,7 +36,12 @@ const items: MenuItem[] = [
             { key: '5-2', icon: <AppstoreOutlined />, label: '镜像源', path: '/source' },
         ]
     },
-    { key: '6', icon: <FundViewOutlined />, label: '运维监控', path: '/warnning' },
+    { key: '6', icon: <FundViewOutlined />, label: '运维监控',
+        children:[
+            { key: '6-1', icon: <FundOutlined />, label: '监控试图', path: '/warnning' },
+            { key: '6-2', icon: <AlertOutlined />, label: '报警转发', path: '/note' },
+        ]
+     },
 ];
 
 const onSelect = (key: any) => {
