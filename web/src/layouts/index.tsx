@@ -1,7 +1,7 @@
 import { Link, Outlet } from 'umi';
 import './index.less';
 import React, { useState } from 'react';
-import { DownOutlined, LoginOutlined } from '@ant-design/icons';
+import { DownOutlined, FundViewOutlined, LoginOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, Space } from 'antd';
 import { history } from 'umi';
 import {
@@ -35,7 +35,8 @@ const items: MenuItem[] = [
             { key: '5-1', icon: <AppstoreOutlined />, label: '三方工具', path: '/tools' },
             { key: '5-2', icon: <AppstoreOutlined />, label: '镜像源', path: '/source' },
         ]
-    }
+    },
+    { key: '6', icon: <FundViewOutlined />, label: '运维监控', path: '/warnning' },
 ];
 
 const onSelect = (key: any) => {
@@ -75,7 +76,7 @@ export default function App(props: any) {
                             <Dropdown menu={{ items:DropdownList }}>
                                 <Space>
                                     <Avatar src="https://tse3-mm.cn.bing.net/th/id/OIP-C.bUW2KSLDmuJtIbm7aLB1TwAAAA?rs=1&pid=ImgDetMain" />
-                                    <span>{JSON.parse(localStorage.getItem('userinfo') as string).name}</span>
+                                    <span>{JSON.parse(localStorage.getItem('userinfo') as string)?.name || "未登录"}</span>
                                     <DownOutlined />
                                 </Space>
                             </Dropdown>
