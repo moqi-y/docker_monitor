@@ -10,6 +10,7 @@ export default defineConfig({
         { path: "/remoteContainer", component: "remoteContainer"},
         { path: "/tools", component: "tools"},
         { path: "/source", component: "source"},
+        { path: "/warnning", component: "warnning"},
     ],
     npmClient: 'npm',
     proxy: {
