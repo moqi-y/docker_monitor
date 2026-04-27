@@ -15,13 +15,12 @@
     📊 实时可观测性：智能日志分析、指标监控、告警预测一体化
 
 ## 🛠 技术架构
-层级	技术选型
-后端服务	Python 3.10+ / FastAPI / Uvicorn
-AI 引擎	腾讯混元大模型（自然语言理解 + 智能决策）
-前端框架	React 18 + Umi.js 4
-UI 组件库	Ant Design 5.x
-状态管理	Zustand
-网络请求	Fetch API
+后端服务：Python 3.10+ / FastAPI / Uvicorn            
+AI 引擎：腾讯混元大模型（自然语言理解 + 智能决策）        
+前端框架：React 18 + Umi.js 4        
+UI 组件库：Ant Design 5.x        
+状态管理：Zustand        
+网络请求：Fetch API        
 
 ## 📦 安装依赖
 ```
@@ -43,7 +42,8 @@ npm start
 ## 访问Web端
 http://localhost:8001
 
-## 服务端
+## API文档
+http://localhost:8000/docs
 
 ## Web端
 ### 技术栈： React 18 + Umi + Antd + Fetch + Zustand 
